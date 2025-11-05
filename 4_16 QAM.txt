@@ -1,12 +1,11 @@
-%Generate Random Binary Data Stream
 
-M = 16; % Modulation order (alphabet size or number of points in signal constellation)
-k = log2(M); % Number of bits per symbol
-n = 30000; % Number of bits to process
-sps = 1; % Number of samples per symbol (oversampling factor)
+M = 16; 
+k = log2(M);
+n = 30000;
+sps = 1;
 
 rng default;
-dataIn = randi([0 1],n,1); % Generate vector of binary data
+dataIn = randi([0 1],n,1);
 
 stem(dataIn(1:40),'filled');
 title('Random Bits');
@@ -15,59 +14,46 @@ ylabel('Binary Value');
 
 dataInMatrix = reshape(dataIn,length(dataIn)/k,k);
 dataSymbolsIn = bi2de(dataInMatrix);
-
-%Plot the first 10 symbols in a stem plot.
-
-figure; % Create new figure window.
+figure;
 stem(dataSymbolsIn(1:10));
 title('Random Symbols');
 xlabel('Symbol Index');
 ylabel('Integer Value');
+dataMod = qammod(dataSymbolsIn,M,'bin'); 
+dataModG = qammod(dataSymbolsIn,M);
 
-%Modulate Using 16-QAM
-
-dataMod = qammod(dataSymbolsIn,M,'bin'); % Binary coding with phase offset of zero
-dataModG = qammod(dataSymbolsIn,M); % Gray coding with phase offset of zero
-
-%Add White Gaussian Noise
 EbNo = 10;
 snr = EbNo+10*log10(k)-10*log10(sps);
 
 receivedSignal = awgn(dataMod,snr,'measured');
 receivedSignalG = awgn(dataModG,snr,'measured');
 
-%Create Constellation Diagram
 
 sPlotFig = scatterplot(receivedSignal,1,0,'g.');
 hold on
 scatterplot(dataMod,1,0,'k*',sPlotFig)
 
-%Demodulate 16-QAM
-
 dataSymbolsOut = qamdemod(receivedSignal,M,'bin');
 dataSymbolsOutG = qamdemod(receivedSignalG,M);
 
 dataOutMatrix = de2bi(dataSymbolsOut,k);
-dataOut = dataOutMatrix(:); % Return data in column vector
+dataOut = dataOutMatrix(:);
 dataOutMatrixG = de2bi(dataSymbolsOutG,k);
-dataOutG = dataOutMatrixG(:); % Return data in column vector
+dataOutG = dataOutMatrixG(:); 
 
-%Compute System BER
+
 
 [numErrors,ber] = biterr(dataIn,dataOut);
-fprintf('\nThe binary coding bit error rate is %5.2e, based on %d errors.\n', ...
-    ber,numErrors)
+fprintf('\nThe binary coding bit error rate is %5.2e, based on %d errors.\n', ...ber,numErrors)
 
 [numErrorsG,berG] = biterr(dataIn,dataOutG);
-fprintf('\nThe Gray coding bit error rate is %5.2e, based on %d errors.\n', ...
-    berG,numErrorsG)
+fprintf('\nThe Gray coding bit error rate is %5.2e, based on %d errors.\n', ...berG,numErrorsG)
 
-%Plot Signal Constellations
 
-M = 16; % Modulation order
-x = (0:15); % Integer input
-symbin = qammod(x,M,'bin'); % 16-QAM output (natural-coded binary)
-symgray = qammod(x,M,'gray'); % 16-QAM output (Gray-coded)
+M = 16; 
+x = (0:15); 
+symbin = qammod(x,M,'bin'); 
+symgray = qammod(x,M,'gray'); 
 
 scatterplot(symgray,1,0,'b*');
 for k = 1:M
@@ -82,4 +68,5 @@ for k = 1:M
         num2str(x(k)),'Color',[1 0 0]);
 end
 title('16-QAM Symbol Mapping')
+
 axis([-4 4 -4 4])
