@@ -1,10 +1,10 @@
 close all;
 clc;
 clear all;
-% Generation of Random Bits
+
 r=round(rand(1,20));
 display(r)
-% Chip Pattern for station A, B and C
+
 a_one=[1 -1 -1 1 -1 1];
 a_zero=-1*a_one;
 b_one=[1 1 -1 -1 1 1];
@@ -12,7 +12,6 @@ b_zero=-1*b_one;
 c_one=[1 1 -1 1 1 -1];
 c_zero=-1*c_one;
 
-% Random Allotment of bits to stations A,B and C
 cdma_seq=[];
 for counter=1:20
 switch (rand(3,1,1))
@@ -37,9 +36,6 @@ end
 end
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   Decoding the Signal
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cntr=0;
 for selector=1:6:120
 cntr=cntr+1;
@@ -63,3 +59,4 @@ end
 end
 end
 end
+
