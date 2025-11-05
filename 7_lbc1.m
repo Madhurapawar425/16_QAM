@@ -1,11 +1,11 @@
-% Linear block codes-coding and decoding
+
 
 clc
 clear all
 close all
-% Use a [7,4] Hamming code.
+
 %k = 3; n = 2^m-1; m = n-k;
-%[H, G] = hammgen(k); % Produce parity-check matrix.
+%[H, G] = hammgen(k); 
 k=input('Enter no of message bits k');
 n=input('Enter no of code bits n');
 G=zeros(k,n);
@@ -26,15 +26,15 @@ end
 c(1:2^k,:)=rem(dbb(1:2^k,:)*G,2);
 wt=sum(c,2);
 H=[G(:,k+1:n)' eye(n-k)];
-trt = syndtable(H); % Produce decoding table.
+trt = syndtable(H); 
 disp('Enter recd vector');
 for i=1:n
     recd(1,i)=input('');
 end
 syndrome = rem(recd * H',2);
-syndrome_de = bi2de(syndrome,'left-msb'); % Convert to decimal.
+syndrome_de = bi2de(syndrome,'left-msb'); 
 disp(['Syndrome = ',num2str(syndrome_de),...
     ' (decimal), ',num2str(syndrome),' (binary)']);
-corrvect = trt(1+syndrome_de,:); % Correction vector
-%Now compute the corrected codeword.
+corrvect = trt(1+syndrome_de,:); 
 correctedcode = rem(corrvect+recd,2);
+
