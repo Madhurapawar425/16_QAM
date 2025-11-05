@@ -11,15 +11,14 @@ for i=1:k
     m(1,i)=input('');
 end
 ccode = encode(m,n,k,'cyclic/fmt',g)
-trt = syndtable(H); % Produce decoding table.
+trt = syndtable(H); 
 disp('Enter recd vector');
 for i=1:n
     recd(1,i)=input('');
 end
 syndrome = rem(recd * H',2);
-syndrome_de = bi2de(syndrome,'left-msb'); % Convert to decimal.
+syndrome_de = bi2de(syndrome,'left-msb'); 
 disp(['Syndrome = ',num2str(syndrome_de),...
     ' (decimal), ',num2str(syndrome),' (binary)']);
-corrvect = trt(1+syndrome_de,:); % Correction vector
-%Now compute the corrected codeword.
+corrvect = trt(1+syndrome_de,:); 
 correctedcode = rem(corrvect+recd,2);
