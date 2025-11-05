@@ -1,0 +1,81 @@
+*************************Cyclic Codes******************
+
+clc
+clear all
+close all
+k=input('Enter no of message bits k');
+n=input('Enter no of code bits n');
+g = cyclpoly(n,k);
+[H,G,k] = cyclgen(n,g)
+%pol = cyclpoly(n,k,'all'); 
+disp('Enter message vector');
+for i=1:k
+    m(1,i)=input('');
+end
+ccode = encode(m,n,k,'cyclic/fmt',g)
+trt = syndtable(H); % Produce decoding table.
+disp('Enter recd vector');
+for i=1:n
+    recd(1,i)=input('');
+end
+syndrome = rem(recd * H',2);
+syndrome_de = bi2de(syndrome,'left-msb'); % Convert to decimal.
+disp(['Syndrome = ',num2str(syndrome_de),...
+    ' (decimal), ',num2str(syndrome),' (binary)']);
+corrvect = trt(1+syndrome_de,:); % Correction vector
+%Now compute the corrected codeword.
+correctedcode = rem(corrvect+recd,2);
+
+
+
+
+
+
+
+%% Cyclic Output%%
+
+
+
+
+Enter no of message bits k3
+Enter no of code bits n6
+
+H =
+
+     1     0     0     1     0     0
+     0     1     0     0     1     0
+     0     0     1     0     0     1
+
+
+G =
+
+     1     0     0     1     0     0
+     0     1     0     0     1     0
+     0     0     1     0     0     1
+
+
+k =
+
+     3
+
+Enter message vector
+1
+0
+1
+
+ccode =
+
+     1     0     1     1     0     1
+
+Single-error patterns loaded in decoding table.  4 rows remaining.
+2-error patterns loaded.  1 rows remaining.
+3-error patterns loaded.  0 rows remaining.
+Enter recd vector
+1
+1
+1
+0
+1
+0
+Syndrome = 5 (decimal), 1  0  1 (binary)
+>> 
